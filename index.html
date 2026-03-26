@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HabitFlow — Трекер привычек</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ONBOARDING -->
+
+<div id="onboard">
+  <div class="onboard-illus">🌱</div>
+  <div class="logo">Habit<span>Flow</span></div>
+  <div class="tagline">Отслеживай привычки. Строй серии.<br>Достигай целей каждый день.</div>
+  <button class="onboard-btn" onclick="enterApp()">Начать →</button>
+  <div class="onboard-secondary" onclick="enterApp()">Продолжить без входа</div>
+</div>
+
+<!-- MAIN APP -->
+
+<div id="app" style="display:none">
+
+  <!-- HOME SCREEN -->
+
+  <div class="screen active" id="screen-home">
+    <div class="topbar">
+      <div>
+        <h1 id="greeting">Привет 👋</h1>
+        <div class="sub" id="date-today"></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Тема">🌙</div>
+        <div class="icon-btn" onclick="openLangModal()">🌐</div>
+      </div>
+    </div>
+    <div class="date-strip" id="date-strip"></div>
+    <div class="scroll-area">
+      <div id="xp-banner"></div>
+      <div class="section-title" id="lbl-today-habits" data-i18n="today_habits">Сегодня</div>
+      <div id="habits-list">
+        <div class="empty">
+          <div class="empty-icon">🪴</div>
+          <div class="empty-title" data-i18n="no_habits">Нет привычек</div>
+          <div class="empty-desc" data-i18n="add_first">Добавь первую привычку, нажав +</div>
+        </div>
+      </div>
+    </div>
+    <button class="fab" onclick="openAddModal()">+</button>
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="showTab('home')"><div class="nav-icon">🏠</div><div class="nav-label" data-i18n="nav_home">Главная</div></div>
+      <div class="nav-item" onclick="showTab('stats')"><div class="nav-icon">📊</div><div class="nav-label" data-i18n="nav_stats">Статистика</div></div>
+      <div class="nav-item" onclick="showTab('badges')"><div class="nav-icon">🏆</div><div class="nav-label" data-i18n="nav_badges">Награды</div></div>
+      <div class="nav-item" onclick="showTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label" data-i18n="nav_settings">Настройки</div></div>
+    </div>
+  </div>
+
+  <!-- STATS SCREEN -->
+
+  <div class="screen" id="screen-stats">
+    <div class="topbar">
+      <div><h1 data-i18n="nav_stats">Статистика</h1></div>
+      <div><div class="icon-btn" onclick="toggleTheme()">🌙</div></div>
+    </div>
+    <div class="scroll-area">
+      <div class="stats-grid" id="stats-grid"></div>
+      <div class="chart-card">
+        <div class="chart-title" data-i18n="week_chart">Активность за неделю</div>
+        <div class="bar-chart" id="week-chart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title" data-i18n="month_chart">Месячный обзор</div>
+        <div id="donut-chart"></div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="showTab('home')"><div class="nav-icon">🏠</div><div class="nav-label" data-i18n="nav_home">Главная</div></div>
+      <div class="nav-item active" onclick="showTab('stats')"><div class="nav-icon">📊</div><div class="nav-label" data-i18n="nav_stats">Статистика</div></div>
+      <div class="nav-item" onclick="showTab('badges')"><div class="nav-icon">🏆</div><div class="nav-label" data-i18n="nav_badges">Награды</div></div>
+      <div class="nav-item" onclick="showTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label" data-i18n="nav_settings">Настройки</div></div>
+    </div>
+  </div>
+
+  <!-- BADGES SCREEN -->
+
+  <div class="screen" id="screen-badges">
+    <div class="topbar"><div><h1 data-i18n="nav_badges">Награды</h1></div></div>
+    <div class="scroll-area">
+      <div class="section-title" data-i18n="achievements">Достижения</div>
+      <div class="badge-grid" id="badge-grid"></div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="showTab('home')"><div class="nav-icon">🏠</div><div class="nav-label" data-i18n="nav_home">Главная</div></div>
+      <div class="nav-item" onclick="showTab('stats')"><div class="nav-icon">📊</div><div class="nav-label" data-i18n="nav_stats">Статистика</div></div>
+      <div class="nav-item active" onclick="showTab('badges')"><div class="nav-icon">🏆</div><div class="nav-label" data-i18n="nav_badges">Награды</div></div>
+      <div class="nav-item" onclick="showTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label" data-i18n="nav_settings">Настройки</div></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS SCREEN -->
+
+  <div class="screen" id="screen-settings">
+    <div class="topbar"><div><h1 data-i18n="nav_settings">Настройки</h1></div></div>
+    <div class="scroll-area">
+      <div class="section-title" data-i18n="appearance">Внешний вид</div>
+      <div class="settings-row" onclick="toggleTheme()">
+        <div class="settings-row-left">
+          <div class="settings-icon">🌙</div>
+          <div><div class="settings-label" data-i18n="dark_mode">Тёмная тема</div></div>
+        </div>
+        <div class="toggle on" id="theme-toggle"></div>
+      </div>
+      <div class="settings-row">
+        <div class="settings-row-left">
+          <div class="settings-icon">🌐</div>
+          <div><div class="settings-label" data-i18n="language">Язык</div></div>
+        </div>
+        <div class="lang-toggle">
+          <div class="lang-opt active" id="lang-ru" onclick="setLang('ru')">RU</div>
+          <div class="lang-opt" id="lang-en" onclick="setLang('en')">EN</div>
+        </div>
+      </div>
+      <div class="section-title" data-i18n="notifications">Уведомления</div>
+      <div class="settings-row">
+        <div class="settings-row-left">
+          <div class="settings-icon">🔔</div>
+          <div>
+            <div class="settings-label" data-i18n="push_notifs">Push-уведомления</div>
+            <div class="settings-sub" data-i18n="push_sub">Напоминания о привычках</div>
+          </div>
+        </div>
+        <div class="toggle" id="notif-toggle" onclick="toggleNotif()"></div>
+      </div>
+      <div class="section-title" data-i18n="data">Данные</div>
+      <div class="settings-row" onclick="exportData()">
+        <div class="settings-row-left">
+          <div class="settings-icon">📤</div>
+          <div><div class="settings-label" data-i18n="export">Экспорт данных</div></div>
+        </div>
+        <div style="color:var(--text2);font-size:18px;">›</div>
+      </div>
+      <div class="settings-row" onclick="confirmReset()">
+        <div class="settings-row-left">
+          <div class="settings-icon">🗑️</div>
+          <div><div class="settings-label" style="color:var(--accent4)" data-i18n="reset">Сбросить все данные</div></div>
+        </div>
+        <div style="color:var(--text2);font-size:18px;">›</div>
+      </div>
+      <div style="height:8px"></div>
+      <div style="text-align:center;color:var(--text3);font-size:12px;padding:16px 0">HabitFlow v1.0 • Offline-first</div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="showTab('home')"><div class="nav-icon">🏠</div><div class="nav-label" data-i18n="nav_home">Главная</div></div>
+      <div class="nav-item" onclick="showTab('stats')"><div class="nav-icon">📊</div><div class="nav-label" data-i18n="nav_stats">Статистика</div></div>
+      <div class="nav-item" onclick="showTab('badges')"><div class="nav-icon">🏆</div><div class="nav-label" data-i18n="nav_badges">Награды</div></div>
+      <div class="nav-item active" onclick="showTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label" data-i18n="nav_settings">Настройки</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT HABIT MODAL -->
+
+<div class="modal-overlay" id="add-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="add-modal-title" data-i18n="add_habit">Новая привычка</div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="habit_name">Название</label>
+      <input type="text" class="form-input" id="h-name" placeholder="Например: Медитация">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="icon">Иконка</label>
+      <div class="icon-picker" id="icon-picker"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="color">Цвет</label>
+      <div class="color-picker" id="color-picker"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="frequency">Периодичность</label>
+      <select class="form-input" id="h-freq">
+        <option value="daily" data-i18n="daily">Ежедневно</option>
+        <option value="weekdays" data-i18n="weekdays">Будние дни</option>
+        <option value="custom" data-i18n="custom_days">Свои дни</option>
+        <option value="nday" data-i18n="ntimes">N раз в день</option>
+      </select>
+    </div>
+    <div class="form-group" id="weekday-group" style="display:none">
+      <label class="form-label" data-i18n="days">Дни недели</label>
+      <div class="weekday-picker">
+        <div class="wd-btn" data-d="1">Пн</div><div class="wd-btn" data-d="2">Вт</div>
+        <div class="wd-btn" data-d="3">Ср</div><div class="wd-btn" data-d="4">Чт</div>
+        <div class="wd-btn" data-d="5">Пт</div><div class="wd-btn" data-d="6">Сб</div>
+        <div class="wd-btn" data-d="0">Вс</div>
+      </div>
+    </div>
+    <div class="form-group" id="nday-group" style="display:none">
+      <label class="form-label" data-i18n="times_per_day">Раз в день</label>
+      <input type="number" class="form-input" id="h-nday" value="2" min="1" max="20">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" data-i18n="goal">Цель</label>
+        <input type="number" class="form-input" id="h-goal" value="1" min="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="unit">Единица</label>
+        <input type="text" class="form-input" id="h-unit" placeholder="раз / мин / стак.">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" data-i18n="start_date">Начало</label>
+        <input type="date" class="form-input" id="h-start">
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="end_date">Конец</label>
+        <input type="date" class="form-input" id="h-end">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="reminder">Напоминание</label>
+      <input type="time" class="form-input" id="h-remind">
+    </div>
+    <button class="btn btn-primary" onclick="saveHabit()">💾 Сохранить</button>
+    <button class="btn btn-ghost" onclick="closeModal('add-modal')" style="margin-top:10px" data-i18n="cancel">Отмена</button>
+    <button class="btn btn-danger" id="delete-btn" style="margin-top:10px;display:none" onclick="deleteHabit()">🗑️ Удалить привычку</button>
+  </div>
+</div>
+
+<!-- NOTE MODAL -->
+
+<div class="modal-overlay" id="note-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" data-i18n="add_note">Заметка</div>
+    <div class="form-group">
+      <label class="form-label" id="note-date-label"></label>
+      <textarea class="note-input" id="note-text" placeholder="Как прошло? Напиши заметку..."></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="saveNote()" data-i18n="save">Сохранить</button>
+    <button class="btn btn-ghost" onclick="closeModal('note-modal')" style="margin-top:10px" data-i18n="cancel">Отмена</button>
+  </div>
+</div>
+
+<!-- LANG MODAL -->
+
+<div class="modal-overlay" id="lang-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Language / Язык</div>
+    <button class="btn btn-primary" onclick="setLang('ru');closeModal('lang-modal')">🇷🇺 Русский</button>
+    <button class="btn btn-ghost" onclick="setLang('en');closeModal('lang-modal')" style="margin-top:10px">🇬🇧 English</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
